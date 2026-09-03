@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>制作物ポータル｜たけざわ投資塾</title>
+<meta name="description" content="Claude Codeで制作したアプリとホームページを一元管理する私用ポータル。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='10'%20fill='%231E3A5F'/%3E%3Ctext%20x='32'%20y='46'%20font-size='36'%20font-family='serif'%20font-weight='700'%20fill='%23FBF6EC'%20text-anchor='middle'%3E%E6%AD%A6%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+[hidden]{display:none!important}
+:root{
+  --paper:#F5F5F0;
+  --card:#FCFCF9;
+  --ink:#1C2433;
+  --ink-soft:#5A6377;
+  --line:#D9D9CF;
+  --line-faint:#E7E7DE;
+  --navy:#1E3A5F;
+  --navy-deep:#152C4A;
+  --navy-ink:#FFFFFF;
+  --gold:#A8842C;
+  --gold-soft:#CBB273;
+  --shu:#B3341F;
+  --green:#3D6B4F;
+  --shadow:0 1px 2px rgba(28,36,51,.06),0 8px 28px rgba(28,36,51,.07);
+  --focus:#A8842C;
+}
+:root:not([data-theme="light"]){color-scheme:light}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#10141C;
+    --card:#171D2A;
+    --ink:#E9E6DC;
+    --ink-soft:#9AA3B4;
+    --line:#303A4D;
+    --line-faint:#242D3D;
+    --navy:#3D5F8C;
+    --navy-deep:#33517A;
+    --navy-ink:#F4F6F9;
+    --gold:#C9A55A;
+    --gold-soft:#8A7440;
+    --shu:#D25B42;
+    --green:#5F9B77;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    --focus:#C9A55A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#10141C;
+  --card:#171D2A;
+  --ink:#E9E6DC;
+  --ink-soft:#9AA3B4;
+  --line:#303A4D;
+  --line-faint:#242D3D;
+  --navy:#3D5F8C;
+  --navy-deep:#33517A;
+  --navy-ink:#F4F6F9;
+  --gold:#C9A55A;
+  --gold-soft:#8A7440;
+  --shu:#D25B42;
+  --green:#5F9B77;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --focus:#C9A55A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  font-size:16px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.serif{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 16px 56px}
+@media(min-width:720px){.wrap{padding:44px 24px 72px}}
+
+.head{text-align:center}
+.brand{
+  font-size:12px;letter-spacing:.42em;text-indent:.42em;
+  color:var(--ink-soft);font-weight:500;
+}
+.brand-rule{width:56px;height:1px;background:var(--gold);margin:14px auto 22px}
+.site-title{
+  font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  font-size:clamp(26px,6.5vw,34px);
+  font-weight:700;letter-spacing:.18em;text-indent:.18em;
+  line-height:1.4;
+}
+.site-lead{
+  margin:12px auto 0;max-width:30em;
+  font-size:14px;color:var(--ink-soft);
+}
+.count{color:var(--gold);font-weight:700}
+
+.controls{
+  margin:30px auto 6px;max-width:760px;
+  display:flex;flex-direction:column;gap:12px;align-items:center;
+}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.chip{
+  appearance:none;border:1px solid var(--line);background:var(--card);
+  color:var(--ink-soft);border-radius:999px;
+  font-family:inherit;font-size:13px;font-weight:500;
+  padding:6px 16px;cursor:pointer;
+  transition:border-color .15s ease,background .15s ease,color .15s ease;
+}
+.chip:hover{border-color:var(--navy)}
+.chip[aria-pressed="true"]{
+  background:var(--navy);border-color:var(--navy);color:var(--navy-ink);
+}
+.chip:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.search{
+  width:100%;max-width:420px;
+  border:1px solid var(--line);border-radius:8px;
+  background:var(--card);color:var(--ink);
+  font-family:inherit;font-size:14px;
+  padding:9px 14px;
+}
+.search:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.search::placeholder{color:var(--ink-soft);opacity:.7}
+
+.sec{margin-top:36px}
+.sec-title{
+  display:flex;align-items:center;gap:14px;
+  font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  font-size:17px;font-weight:700;letter-spacing:.22em;
+  color:var(--ink);
+}
+.sec-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.sec-title .n{font-size:12px;color:var(--gold);letter-spacing:.1em;font-family:"Zen Kaku Gothic New",sans-serif}
+
+.grid{
+  margin-top:16px;
+  display:grid;gap:14px;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+}
+.appcard{
+  position:relative;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  padding:20px 20px 18px;
+}
+.appcard::before{
+  content:"";position:absolute;inset:5px;
+  border:1px solid var(--line-faint);
+  border-radius:6px;pointer-events:none;
+}
+.badges{display:flex;flex-wrap:wrap;gap:6px;position:relative}
+.badge{
+  font-size:11px;font-weight:700;letter-spacing:.08em;
+  border-radius:4px;padding:2px 8px;
+  border:1px solid transparent;
+}
+.badge.cat{color:var(--navy);border-color:var(--navy);background:transparent}
+.badge.live{color:var(--green);border-color:var(--green)}
+.badge.repo{color:var(--ink-soft);border-color:var(--line)}
+.badge.check{color:var(--gold);border-color:var(--gold)}
+.app-title{
+  font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  font-size:17.5px;font-weight:700;line-height:1.5;
+  position:relative;
+}
+.app-desc{
+  font-size:13.5px;color:var(--ink-soft);line-height:1.7;
+  position:relative;flex:1;
+}
+.app-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:2px;position:relative;
+}
+.app-date{font-size:12px;color:var(--ink-soft);letter-spacing:.05em}
+.app-links{display:flex;gap:8px;align-items:center}
+.btn{
+  display:inline-block;
+  font-size:13px;font-weight:700;letter-spacing:.06em;
+  border-radius:6px;text-decoration:none;
+  padding:6px 16px;
+  transition:opacity .15s ease,background .15s ease;
+}
+.btn-open{background:var(--navy);color:var(--navy-ink)}
+.btn-open:hover{background:var(--navy-deep)}
+.btn-gh{
+  color:var(--ink-soft);border:1px solid var(--line);
+  padding:5px 12px;font-weight:500;
+}
+.btn-gh:hover{border-color:var(--navy);color:var(--ink)}
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.empty{
+  margin-top:40px;text-align:center;color:var(--ink-soft);font-size:14px;
+}
+.foot{
+  margin-top:56px;text-align:center;
+  font-size:12px;color:var(--ink-soft);letter-spacing:.1em;
+}
+.foot-rule{width:56px;height:1px;background:var(--line);margin:0 auto 16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <p class="brand">TAKEZAWA　PORTAL</p>
+    <div class="brand-rule"></div>
+    <h1 class="site-title">制作物ポータル</h1>
+    <p class="site-lead">Claude Codeで制作したアプリとホームページの一覧。<span style="display:inline-block">全<span class="count" id="total">0</span>作品。</span></p>
+  </header>
+
+  <div class="controls">
+    <div class="chips" id="chips" role="group" aria-label="カテゴリー絞り込み"></div>
+    <input class="search" id="search" type="search" placeholder="作品名や説明で検索" aria-label="検索">
+  </div>
+
+  <main id="sections"></main>
+  <p class="empty" id="empty" hidden>該当する作品がありません。</p>
+
+  <footer class="foot">
+    <div class="foot-rule"></div>
+    <p>私用ページ（検索エンジン非登録）　たけざわ投資塾</p>
+  </footer>
+
+</div>
+
+<script>
+/* ============================================================
+   作品台帳
+   新しい作品を追加するときは、このAPPS配列に1件追加するだけです。
+   cat: カテゴリーキー（CATSに定義があるもの）
+   status: "live"=公開中 / "check"=公開設定要確認 / "repo"=リポジトリ内のみ
+   url: 公開ページのURL（無ければnull）
+   repo: GitHubリポジトリまたはフォルダのURL（無ければnull）
+   date: 更新時期の目安（表示用の文字列。不明なら""）
+   ============================================================ */
+const CATS = [
+  { key: "tool",  label: "アプリ・ツール" },
+  { key: "test",  label: "実力テスト" },
+  { key: "lp",    label: "ポータルサイト・LP" },
+  { key: "slide", label: "スライド・資料" },
+];
+
+const APPS = [
+  {
+    cat: "test", status: "live", date: "2026年9月",
+    title: "投資実力テスト（表紙）",
+    desc: "入門編からアドバンス編まで、投資力を段階的に測るテストシリーズの入口ページ。",
+    url: "https://takezawa-toshi-test.vercel.app/",
+    repo: "https://github.com/takezawa2006-bit/toshi-test",
+  },
+  {
+    cat: "test", status: "live", date: "2026年9月",
+    title: "入門編その1　株式投資のきほん",
+    desc: "株式投資のきほんを問う4択15問。所要約5分の腕試しテスト第1弾。",
+    url: "https://takezawa-toshi-test.vercel.app/tests/nyumon-1/",
+    repo: "https://github.com/takezawa2006-bit/toshi-test",
+  },
+  {
+    cat: "test", status: "live", date: "2026年9月",
+    title: "入門編その2　株の売買と制度のきほん",
+    desc: "株の売買と制度のきほんを問う4択15問。入門編の第2弾。",
+    url: "https://takezawa-toshi-test.vercel.app/tests/nyumon-2/",
+    repo: "https://github.com/takezawa2006-bit/toshi-test",
+  },
+  {
+    cat: "tool", status: "live", date: "2026年8月",
+    title: "奇門遁甲AI投資占い",
+    desc: "生年月日だけ・登録不要・無料の投資占いアプリ。九星の投資家の相と八門の運勢に加え、孔明AIの助言で毎日4K企業の学びに着地します。",
+    url: "https://toshi-uranai.vercel.app",
+    repo: null,
+  },
+  {
+    cat: "lp", status: "live", date: "",
+    title: "たけざわ投資塾無料体験講座LP",
+    desc: "たけざわ投資塾の無料体験講座を案内するランディングページ。テストや動画からの導線先。",
+    url: "https://taiken-koza.vercel.app",
+    repo: null,
+  },
+  {
+    cat: "lp", status: "live", date: "2026年8月",
+    title: "第1回4K投資レース案内ページ",
+    desc: "仮想300万円で3銘柄を選び、6週間の騰落率を競う塾生・サロン・OB限定企画の案内ページ。2026年9月7日開幕。",
+    url: "https://4k-race-2026.vercel.app",
+    repo: null,
+  },
+  {
+    cat: "slide", status: "check", date: "2026年6月",
+    title: "海外投資家はなぜ日本株を爆買いするのか",
+    desc: "海外投資家による日本株買いの背景を経営の目で読み解く解説スライド。",
+    url: "https://takezawa2006-bit.github.io/ai-japan-slides/",
+    repo: "https://github.com/takezawa2006-bit/ai-japan-slides",
+  },
+  {
+    cat: "slide", status: "check", date: "2026年6月",
+    title: "キオクシア時価総額30兆円突破",
+    desc: "キオクシアの時価総額30兆円突破を、今から買って大丈夫かという視点で解説するスライド。",
+    url: "https://takezawa2006-bit.github.io/ai-japan-slides/kioxia-30t.html",
+    repo: "https://github.com/takezawa2006-bit/ai-japan-slides",
+  },
+  {
+    cat: "slide", status: "check", date: "2026年6月",
+    title: "防衛ドローンという新市場",
+    desc: "防衛ドローン市場と日本の7銘柄を経営の目で見る解説スライド。",
+    url: "https://takezawa2006-bit.github.io/defense-drone-slides/",
+    repo: "https://github.com/takezawa2006-bit/defense-drone-slides",
+  },
+  {
+    cat: "tool", status: "check", date: "2026年6月",
+    title: "4Kカウンター",
+    desc: "企業名または証券コードを入力すると、4K企業の条件への適合度を即座に採点するツール。",
+    url: "https://takezawa2006-bit.github.io/4k-counter/",
+    repo: "https://github.com/takezawa2006-bit/4k-counter",
+  },
+  {
+    cat: "tool", status: "repo", date: "",
+    title: "つみたてシミュレーター",
+    desc: "積立投資の将来資産を試算するシミュレーター。ワークスペース内の試作品。",
+    url: null,
+    repo: "https://github.com/takezawa2006-bit/takezazwaCC/tree/main/tsumitate-sim",
+  },
+  {
+    cat: "tool", status: "live", date: "",
+    title: "銘柄かるた",
+    desc: "かるた遊びの形で銘柄に親しむ学習ゲーム。",
+    url: "https://meigara-karuta.vercel.app/",
+    repo: null,
+  },
+];
+
+const STATUS = {
+  live:  { label: "公開中",       cls: "live"  },
+  check: { label: "公開設定要確認", cls: "check" },
+  repo:  { label: "リポジトリ内",   cls: "repo"  },
+  unknown: { label: "URL確認中",    cls: "check" },
+};
+
+let activeCat = "all";
+let query = "";
+
+const chipsEl = document.getElementById("chips");
+const sectionsEl = document.getElementById("sections");
+const emptyEl = document.getElementById("empty");
+const searchEl = document.getElementById("search");
+document.getElementById("total").textContent = APPS.length;
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+function renderChips(){
+  const all = [{ key: "all", label: "すべて" }, ...CATS];
+  chipsEl.innerHTML = all.map(c =>
+    `<button type="button" class="chip" data-cat="${c.key}" aria-pressed="${c.key===activeCat}">${esc(c.label)}</button>`
+  ).join("");
+}
+
+function matches(app){
+  if(activeCat !== "all" && app.cat !== activeCat) return false;
+  if(query){
+    const hay = (app.title + " " + app.desc).toLowerCase();
+    if(!hay.includes(query)) return false;
+  }
+  return true;
+}
+
+function cardHtml(app){
+  const st = STATUS[app.status] || STATUS.repo;
+  const cat = CATS.find(c => c.key === app.cat);
+  const openBtn = app.url
+    ? `<a class="btn btn-open" href="${esc(app.url)}" target="_blank" rel="noopener">開く</a>` : "";
+  const ghBtn = app.repo
+    ? `<a class="btn btn-gh" href="${esc(app.repo)}" target="_blank" rel="noopener">GitHub</a>` : "";
+  return `<article class="appcard">
+    <div class="badges">
+      <span class="badge cat">${esc(cat ? cat.label : app.cat)}</span>
+      <span class="badge ${st.cls}">${esc(st.label)}</span>
+    </div>
+    <h3 class="app-title">${esc(app.title)}</h3>
+    <p class="app-desc">${esc(app.desc)}</p>
+    <div class="app-foot">
+      <span class="app-date">${esc(app.date || "")}</span>
+      <span class="app-links">${ghBtn}${openBtn}</span>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const visible = APPS.filter(matches);
+  const parts = [];
+  for(const c of CATS){
+    const items = visible.filter(a => a.cat === c.key);
+    if(!items.length) continue;
+    parts.push(`<section class="sec">
+      <h2 class="sec-title">${esc(c.label)}<span class="n">${items.length}件</span></h2>
+      <div class="grid">${items.map(cardHtml).join("")}</div>
+    </section>`);
+  }
+  sectionsEl.innerHTML = parts.join("");
+  emptyEl.hidden = visible.length > 0;
+}
+
+chipsEl.addEventListener("click", e => {
+  const btn = e.target.closest(".chip");
+  if(!btn) return;
+  activeCat = btn.dataset.cat;
+  renderChips();
+  render();
+});
+searchEl.addEventListener("input", () => {
+  query = searchEl.value.trim().toLowerCase();
+  render();
+});
+
+renderChips();
+render();
+</script>
+</body>
+</html>
