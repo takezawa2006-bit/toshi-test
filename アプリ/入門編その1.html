@@ -1,0 +1,679 @@
+<title>投資実力テスト入門編その1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#F5F5F0;
+  --card:#FCFCF9;
+  --ink:#1C2433;
+  --ink-soft:#5A6377;
+  --line:#D9D9CF;
+  --line-faint:#E7E7DE;
+  --navy:#1E3A5F;
+  --navy-deep:#152C4A;
+  --navy-ink:#FFFFFF;
+  --gold:#A8842C;
+  --gold-soft:#CBB273;
+  --shu:#B3341F;
+  --track:#E4E4DA;
+  --shadow:0 1px 2px rgba(28,36,51,.06),0 8px 28px rgba(28,36,51,.07);
+  --focus:#A8842C;
+}
+:root:not([data-theme="light"]){
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#10141C;
+    --card:#171D2A;
+    --ink:#E9E6DC;
+    --ink-soft:#9AA3B4;
+    --line:#303A4D;
+    --line-faint:#242D3D;
+    --navy:#3D5F8C;
+    --navy-deep:#33517A;
+    --navy-ink:#F4F6F9;
+    --gold:#C9A55A;
+    --gold-soft:#8A7440;
+    --shu:#D25B42;
+    --track:#242D3D;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    --focus:#C9A55A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#10141C;
+  --card:#171D2A;
+  --ink:#E9E6DC;
+  --ink-soft:#9AA3B4;
+  --line:#303A4D;
+  --line-faint:#242D3D;
+  --navy:#3D5F8C;
+  --navy-deep:#33517A;
+  --navy-ink:#F4F6F9;
+  --gold:#C9A55A;
+  --gold-soft:#8A7440;
+  --shu:#D25B42;
+  --track:#242D3D;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --focus:#C9A55A;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  font-size:16px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.serif{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif}
+
+.wrap{
+  max-width:640px;
+  margin:0 auto;
+  padding:20px 16px 48px;
+}
+@media(min-width:720px){.wrap{padding:40px 24px 64px}}
+
+/* 額装カード：賞状の二重罫 */
+.card{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  padding:28px 20px 32px;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:7px;
+  border:1px solid var(--line-faint);
+  border-radius:5px;
+  pointer-events:none;
+}
+@media(min-width:720px){.card{padding:44px 48px 48px}}
+
+.screen{animation:rise .28s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .screen{animation:none}
+  .stamp{animation:none}
+  *{transition:none!important}
+}
+
+/* ---------- 表紙 ---------- */
+.cover{text-align:center}
+.brand{
+  font-size:12px;
+  letter-spacing:.42em;
+  text-indent:.42em;
+  color:var(--ink-soft);
+  font-weight:500;
+}
+.brand-rule{
+  width:56px;height:1px;background:var(--gold);
+  margin:14px auto 0;
+}
+.title-v{
+  display:inline-block;
+  writing-mode:vertical-rl;
+  white-space:nowrap;
+  height:7.6em;
+  margin:26px auto 18px;
+  font-size:clamp(34px,9vw,44px);
+  font-weight:700;
+  letter-spacing:.24em;
+  line-height:1;
+  color:var(--ink);
+}
+.edition{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  font-size:15px;
+  letter-spacing:.3em;
+  text-indent:.3em;
+  color:var(--navy);
+  font-weight:600;
+}
+.edition::before,.edition::after{
+  content:"";width:26px;height:1px;background:var(--gold-soft);
+}
+.seal{
+  width:52px;height:52px;
+  margin:26px auto 0;
+  background:var(--shu);
+  color:#FBF6EC;
+  border-radius:6px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-size:19px;line-height:1.15;
+  font-weight:700;
+  letter-spacing:.05em;
+  box-shadow:inset 0 0 0 2px rgba(251,246,236,.35);
+}
+.meta-row{
+  display:flex;justify-content:center;flex-wrap:wrap;
+  gap:6px 0;
+  margin:26px 0 4px;
+  font-size:13.5px;
+  color:var(--ink-soft);
+}
+.meta-row span{padding:0 14px;position:relative}
+.meta-row span+span::before{
+  content:"";position:absolute;left:0;top:50%;
+  transform:translateY(-50%);
+  width:1px;height:12px;background:var(--line);
+}
+.lead{
+  margin:18px auto 0;
+  max-width:26em;
+  font-size:14.5px;
+  color:var(--ink-soft);
+  text-align:center;
+}
+.supervisor{
+  margin-top:30px;
+  font-size:12.5px;
+  color:var(--ink-soft);
+  letter-spacing:.08em;
+}
+
+/* ---------- ボタン ---------- */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-indent:.14em;
+  border-radius:6px;
+  padding:15px 28px;
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:background .15s ease,transform .08s ease,border-color .15s ease;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--navy);color:var(--navy-ink)}
+.btn-primary:hover{background:var(--navy-deep)}
+.btn-ghost{
+  background:transparent;color:var(--navy);
+  border-color:var(--navy);
+}
+.btn-ghost:hover{background:rgba(30,58,95,.07)}
+.btn-block{display:flex;width:100%}
+.btn-start{margin-top:30px;min-width:240px}
+.btn:focus-visible,.choice:focus-visible,.linklike:focus-visible{
+  outline:2px solid var(--focus);
+  outline-offset:3px;
+}
+.linklike{
+  background:none;border:none;cursor:pointer;
+  font-family:inherit;font-size:14px;
+  color:var(--ink-soft);
+  text-decoration:underline;
+  text-underline-offset:4px;
+  letter-spacing:.06em;
+}
+.linklike:hover{color:var(--ink)}
+
+/* ---------- 設問 ---------- */
+.q-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+  font-size:13px;
+  color:var(--ink-soft);
+  letter-spacing:.12em;
+}
+.q-head .part{font-weight:600;color:var(--gold)}
+.q-head .count{font-variant-numeric:tabular-nums;white-space:nowrap}
+.progress{
+  height:2px;background:var(--track);
+  margin:12px 0 26px;
+  border-radius:1px;overflow:hidden;
+}
+.progress i{
+  display:block;height:100%;
+  background:var(--gold);
+  transition:width .3s ease;
+}
+.q-no{
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.24em;
+  color:var(--navy);
+  margin-bottom:8px;
+}
+.q-text{
+  font-size:clamp(18px,4.6vw,21px);
+  font-weight:700;
+  line-height:1.65;
+  text-wrap:balance;
+  margin-bottom:24px;
+}
+.choices{display:flex;flex-direction:column;gap:10px;list-style:none}
+.choice{
+  position:relative;
+  display:flex;align-items:flex-start;gap:12px;
+  width:100%;
+  text-align:left;
+  font-family:inherit;
+  font-size:15.5px;
+  line-height:1.6;
+  color:var(--ink);
+  background:transparent;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:13px 16px 13px 14px;
+  cursor:pointer;
+  transition:border-color .15s ease,background .15s ease,opacity .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+@media(hover:hover){
+  .choice:not([disabled]):hover{border-color:var(--navy);background:rgba(30,58,95,.05)}
+}
+.choice[disabled]{cursor:default}
+.mark{
+  flex:0 0 auto;
+  font-weight:700;
+  color:var(--navy);
+  font-size:17px;
+  line-height:1.45;
+  position:relative;
+}
+/* 添削の朱：正解の○ */
+.choice.is-correct{border-color:var(--shu);background:rgba(179,52,31,.06)}
+.choice.is-correct .mark::after{
+  content:"";
+  position:absolute;left:50%;top:50%;
+  width:30px;height:30px;
+  transform:translate(-50%,-52%);
+  border:2.5px solid var(--shu);
+  border-radius:50%;
+}
+/* 添削の朱：誤答の✗ */
+.choice.is-wrong{border-color:var(--shu)}
+.choice.is-wrong .mark::before,
+.choice.is-wrong .mark::after{
+  content:"";
+  position:absolute;left:50%;top:48%;
+  width:21px;height:2.5px;
+  background:var(--shu);
+}
+.choice.is-wrong .mark::before{transform:translate(-50%,-50%) rotate(45deg)}
+.choice.is-wrong .mark::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.choice.is-dim{opacity:.5}
+
+.verdict{
+  margin-top:22px;
+  font-size:17px;
+  font-weight:700;
+  letter-spacing:.2em;
+}
+.verdict.ok{color:var(--shu)}
+.verdict.ng{color:var(--navy)}
+.expl{
+  margin-top:12px;
+  padding:16px 2px 18px;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.expl-label{
+  font-size:12px;
+  letter-spacing:.4em;
+  color:var(--gold);
+  font-weight:600;
+  margin-bottom:6px;
+}
+.expl p{font-size:14.5px;color:var(--ink);line-height:1.85}
+.next-row{margin-top:24px}
+
+/* ---------- 成績通知 ---------- */
+.result-head{text-align:center}
+.result-title{
+  font-size:clamp(24px,6vw,30px);
+  font-weight:700;
+  letter-spacing:.4em;
+  text-indent:.4em;
+}
+.result-sub{
+  font-size:12px;color:var(--ink-soft);
+  letter-spacing:.32em;text-indent:.32em;
+  margin-top:6px;
+}
+.score-area{
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+  margin:30px 0 8px;
+}
+.score{
+  font-weight:800;
+  font-size:clamp(56px,15vw,76px);
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.02em;
+}
+.score small{
+  font-size:.32em;
+  font-weight:600;
+  color:var(--ink-soft);
+  letter-spacing:.1em;
+  margin-left:4px;
+}
+.stamp{
+  flex:0 0 auto;
+  width:84px;height:84px;
+  border:3px solid var(--shu);
+  border-radius:50%;
+  color:var(--shu);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-indent:.1em;
+  transform:rotate(-8deg);
+  animation:stamp .34s cubic-bezier(.2,1.4,.4,1) .15s both;
+}
+@keyframes stamp{
+  from{opacity:0;transform:rotate(-8deg) scale(1.7)}
+  to{opacity:1;transform:rotate(-8deg) scale(1)}
+}
+.judge{
+  text-align:center;
+  font-size:15.5px;
+  max-width:28em;
+  margin:14px auto 0;
+}
+.sec-title{
+  font-size:12.5px;
+  letter-spacing:.34em;
+  color:var(--gold);
+  font-weight:600;
+  margin:38px 0 14px;
+  text-align:center;
+}
+.bars{display:flex;flex-direction:column;gap:14px}
+.bar-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:baseline}
+.bar-name{font-size:13.5px;color:var(--ink)}
+.bar-val{font-size:13.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-track{
+  grid-column:1/-1;
+  height:5px;background:var(--track);border-radius:3px;overflow:hidden;
+}
+.bar-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .5s ease}
+.dots{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:8px;
+  margin-top:4px;
+}
+.dot{
+  width:34px;height:40px;
+  border:1px solid var(--line);
+  border-radius:5px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:1px;
+}
+.dot b{font-size:10.5px;color:var(--ink-soft);font-weight:500;font-variant-numeric:tabular-nums}
+.dot i{font-style:normal;font-size:15px;font-weight:700;line-height:1}
+.dot.ok i{color:var(--shu)}
+.dot.ng i{color:var(--ink-soft)}
+
+/* ---------- エンディング ---------- */
+.ending{
+  margin-top:44px;
+  padding-top:34px;
+  border-top:1px double var(--line);
+  text-align:center;
+}
+.ending-main{
+  font-size:clamp(20px,5.4vw,24px);
+  font-weight:700;
+  letter-spacing:.14em;
+  text-indent:.14em;
+  color:var(--ink);
+  text-wrap:balance;
+}
+.ending-sub{
+  margin:14px auto 26px;
+  font-size:15px;
+  max-width:24em;
+  color:var(--ink);
+}
+.cta{display:flex;flex-direction:column;gap:12px;max-width:420px;margin:0 auto}
+.cta-note{font-size:12.5px;color:var(--ink-soft);margin-top:10px;letter-spacing:.06em}
+.retry-row{text-align:center;margin-top:34px}
+.foot{
+  text-align:center;
+  margin-top:34px;
+  font-size:12px;
+  color:var(--ink-soft);
+  letter-spacing:.14em;
+}
+</style>
+
+<div class="wrap">
+  <div class="card" id="card">
+
+    <!-- 表紙 -->
+    <div class="screen cover" id="scr-cover">
+      <p class="brand">たけざわ投資塾</p>
+      <div class="brand-rule"></div>
+      <h1 class="title-v serif">投資実力テスト</h1>
+      <p class="edition serif">入門編　その1</p>
+      <div class="seal serif" aria-hidden="true"><span>武</span><span>沢</span></div>
+      <p class="meta-row"><span>全15問</span><span>4択式</span><span>15点満点</span><span>約10分</span></p>
+      <p class="lead">投資の基礎と4K企業投資の入口を確かめる、どなたでも受けられる実力テストです。答えるたびに解説が表示され、テストそのものが教材になります。</p>
+      <button class="btn btn-primary btn-start" id="btn-start">テストを始める</button>
+      <p class="supervisor">監修　武沢信行（たけざわ投資塾塾長）</p>
+    </div>
+
+    <!-- 設問 -->
+    <div class="screen" id="scr-quiz" hidden>
+      <div class="q-head">
+        <span class="part serif" id="part-name"></span>
+        <span class="count" id="q-count"></span>
+      </div>
+      <div class="progress"><i id="prog"></i></div>
+      <p class="q-no serif" id="q-no"></p>
+      <h2 class="q-text" id="q-text"></h2>
+      <div class="choices" id="choices"></div>
+      <div id="feedback" hidden>
+        <p class="verdict serif" id="verdict" role="status"></p>
+        <div class="expl">
+          <p class="expl-label serif">解説</p>
+          <p id="expl-text"></p>
+        </div>
+        <div class="next-row">
+          <button class="btn btn-primary btn-block" id="btn-next">次の問題へ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 成績通知 -->
+    <div class="screen" id="scr-result" hidden>
+      <div class="result-head">
+        <h2 class="result-title serif">成績通知</h2>
+        <p class="result-sub">投資実力テスト　入門編その1</p>
+      </div>
+      <div class="score-area">
+        <p class="score serif"><span id="score-num">0</span><small>／15点</small></p>
+        <div class="stamp serif" id="stamp" hidden>合格</div>
+      </div>
+      <p class="judge" id="judge-text"></p>
+
+      <p class="sec-title serif">分野別の成績</p>
+      <div class="bars" id="bars"></div>
+
+      <p class="sec-title serif">解答一覧</p>
+      <div class="dots" id="dots"></div>
+
+      <div class="ending">
+        <p class="ending-main serif">学ばない投資は危険です。</p>
+        <p class="ending-sub">あなたも投資を体系的に、4K企業投資を学びませんか？</p>
+        <div class="cta">
+          <a class="btn btn-primary btn-block" href="https://taiken-koza.vercel.app" target="_blank" rel="noopener">無料体験講座を見る</a>
+          <a class="btn btn-ghost btn-block" href="https://takezawa-toushi.com/p/r/jWJO8Kuc" target="_blank" rel="noopener">12日間の無料ステップメール講座に登録する</a>
+        </div>
+        <p class="cta-note">どちらも無料でご参加いただけます</p>
+      </div>
+
+      <div class="retry-row">
+        <button class="linklike" id="btn-retry">もう一度挑戦する</button>
+      </div>
+      <p class="foot">たけざわ投資塾　投資実力テスト</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PARTS=["第1部　投資のきほん","第2部　会社の数字のきほん","第3部　4K企業投資のきほん"];
+
+const QUESTIONS=[
+{p:0,q:"株式を買うということは、どういうことでしょうか。",c:["会社にお金を貸して、利息を受け取ること","会社の一部を所有する、オーナーの一人になること","会社の商品を割引で買える会員になること","会社に就職する権利を手に入れること"],a:1,e:"株主は会社のオーナーの一人です。だからこそ株価の動きではなく、どんな事業をしている会社なのかを見ることが大切になります。"},
+{p:0,q:"株を持っている人が、会社の利益の一部から受け取れるお金を何と呼ぶでしょうか。",c:["利息","年金","配当金","手数料"],a:2,e:"配当金は株主への利益の分配です。株式投資の利益には、配当金と値上がり益の2つがあります。"},
+{p:0,q:"株価が長い目で見て上がっていく、いちばんの理由は何でしょうか。",c:["会社の利益が成長していくから","証券会社が宣伝してくれるから","株主の人数が増えるから","社名が有名だから"],a:0,e:"長期的には、株価は会社の利益の成長についていきます。だからこそ利益が伸び続ける会社を選ぶことが大切です。"},
+{p:0,q:"100万円を年10%の複利で運用すると、約2倍になるのはおよそ何年後でしょうか。",c:["約3年後","約7年後","約15年後","約30年後"],a:1,e:"72を利回りの数字で割ると、お金が2倍になるおよその年数が分かります（72の法則）。72÷10で約7年です。"},
+{p:0,q:"「卵をひとつのカゴに盛るな」という投資の格言は、何を教えているでしょうか。",c:["売買の回数を増やしなさい","株は買わずに現金で持ちなさい","いちばん良い銘柄に全額を集中しなさい","複数の銘柄に分けて投資しなさい"],a:3,e:"ひとつの銘柄に全額を注ぎ込まず、複数の銘柄に分けることで、失敗したときの傷を小さくできます。"},
+{p:1,q:"会社が本業の商売で稼いだ利益のことを何と呼ぶでしょうか。",c:["売上高","自己資本","営業利益","配当金"],a:2,e:"売上高からコストを引いた本業の儲けが営業利益です。売上高は売った金額の合計であって、利益ではありません。"},
+{p:1,q:"売上高100億円、営業利益15億円の会社の営業利益率は何%でしょうか。",c:["1.5%","6.7%","15%","85%"],a:2,e:"営業利益÷売上高で計算します。15÷100で15%。100円売るごとに15円の儲けが本業から生まれている計算です。"},
+{p:1,q:"自己資本比率が高い会社の特徴として、正しいものはどれでしょうか。",c:["借金への依存が少なく、倒産しにくい","株価が必ず上がる","社員の人数が多い","商品の値段が高い"],a:0,e:"自己資本は返す必要のないお金です。その割合が高い会社ほど財務が安定しており、不況にも強くなります。"},
+{p:1,q:"ROE（自己資本利益率）が示しているのは、次のうちどれでしょうか。",c:["会社の借金の多さ","株価の割安さ","社員の平均年収","株主のお金を使って、どれだけ効率よく利益を上げたか"],a:3,e:"ROEは当期純利益÷自己資本で計算します。株主から預かったお金を上手に増やしている会社ほど、ROEが高くなります。"},
+{p:1,q:"PER（株価収益率）が低いほど、株価は一般にどう評価されるでしょうか。",c:["利益に比べて割安","利益に比べて割高","配当が多い","成長性が高い"],a:0,e:"PERは株価÷1株あたり利益で計算します。数字が低いほど、利益に比べて株価が安く放置されていると考えられます。"},
+{p:2,q:"たけざわ投資塾の「4K企業」の条件に含まれないものは、どれでしょうか。",c:["高成長","高収益","好財務","高配当"],a:3,e:"4Kは高成長・高収益・好財務・好待遇の4つです。配当の多さではなく、事業と財務の中身で会社を選びます。"},
+{p:2,q:"4K企業の「高成長」の目安は、過去3年平均で売上高が年何%以上伸びていることでしょうか。",c:["3%以上","5%以上","8%以上","10%以上"],a:3,e:"売上が年10%で伸び続ければ、約7年で2倍になります。成長の勢いは売上高の伸びで確かめます。"},
+{p:2,q:"4K企業の「高収益」の目安は、営業利益率何%以上でしょうか。",c:["5%以上","10%以上","20%以上","50%以上"],a:1,e:"本業でしっかり儲ける力の目安が営業利益率10%以上です。成長も収益も10%が合言葉です。"},
+{p:2,q:"4K企業の「好財務」の目安として、一般の事業会社では自己資本比率何%以上が望ましいでしょうか。",c:["10%以上","30%以上","50%以上","70%以上"],a:2,e:"一般の事業会社は50%以上が目安です。なお金融・不動産業は事業の性質上10%以上とし、あわせてROE10%以上も確認します。"},
+{p:2,q:"たけざわ投資塾の投資スタイルとして、いちばん大切にしているものはどれでしょうか。",c:["株価チャートの形","事業内容と経営力と財務","短期の値動き","SNSでの評判"],a:1,e:"チャートではなく、会社の中身を見て長く応援するのが塾の基本です。良い会社を選べば、時間が味方になります。"}
+];
+
+const CIRCLED=["①","②","③","④"];
+const KANJI_NO=["問1","問2","問3","問4","問5","問6","問7","問8","問9","問10","問11","問12","問13","問14","問15"];
+
+const $=id=>document.getElementById(id);
+let idx=0;
+let results=[];
+
+function show(id){
+  ["scr-cover","scr-quiz","scr-result"].forEach(s=>{$(s).hidden=(s!==id)});
+  window.scrollTo({top:0,behavior:"auto"});
+}
+
+function renderQuestion(){
+  const item=QUESTIONS[idx];
+  $("part-name").textContent=PARTS[item.p];
+  $("q-count").textContent="問"+(idx+1)+"／15";
+  $("prog").style.width=((idx)/QUESTIONS.length*100)+"%";
+  $("q-no").textContent=KANJI_NO[idx];
+  $("q-text").textContent=item.q;
+  $("feedback").hidden=true;
+  const box=$("choices");
+  box.innerHTML="";
+  item.c.forEach((text,i)=>{
+    const b=document.createElement("button");
+    b.className="choice";
+    b.type="button";
+    b.innerHTML='<span class="mark serif">'+CIRCLED[i]+'</span><span></span>';
+    b.lastElementChild.textContent=text;
+    b.addEventListener("click",()=>answer(i,b));
+    box.appendChild(b);
+  });
+  const quiz=$("scr-quiz");
+  quiz.classList.remove("screen");
+  void quiz.offsetWidth;
+  quiz.classList.add("screen");
+}
+
+function answer(i,btn){
+  const item=QUESTIONS[idx];
+  const nodes=[...$("choices").children];
+  nodes.forEach(n=>n.disabled=true);
+  const correct=(i===item.a);
+  results.push({correct:correct,part:item.p});
+  nodes[item.a].classList.add("is-correct");
+  if(!correct){btn.classList.add("is-wrong")}
+  nodes.forEach((n,k)=>{
+    if(k!==item.a&&k!==i){n.classList.add("is-dim")}
+  });
+  $("prog").style.width=((idx+1)/QUESTIONS.length*100)+"%";
+  const v=$("verdict");
+  v.textContent=correct?"正解":"残念、正解は"+CIRCLED[item.a]+"です";
+  v.className="verdict serif "+(correct?"ok":"ng");
+  $("expl-text").textContent=item.e;
+  $("btn-next").textContent=(idx===QUESTIONS.length-1)?"成績を見る":"次の問題へ";
+  $("feedback").hidden=false;
+  $("btn-next").focus({preventScroll:true});
+}
+
+function judge(score){
+  if(score>=13)return"みごと合格です。次は入門編その2に進みましょう。";
+  if(score>=10)return"合格です。解説を読み直せば満点が見えています。";
+  if(score>=6)return"基礎固めの途中です。間違えた問題の解説が、そのまま教材になります。";
+  return"伸びしろたっぷりです。ここから学べば大丈夫です。";
+}
+
+function renderResult(){
+  const score=results.filter(r=>r.correct).length;
+  $("score-num").textContent=score;
+  $("stamp").hidden=(score<10);
+  $("judge-text").textContent=judge(score);
+
+  const bars=$("bars");
+  bars.innerHTML="";
+  PARTS.forEach((name,p)=>{
+    const ok=results.filter(r=>r.part===p&&r.correct).length;
+    const row=document.createElement("div");
+    row.className="bar-row";
+    row.innerHTML='<span class="bar-name"></span><span class="bar-val"></span><div class="bar-track"><div class="bar-fill"></div></div>';
+    row.querySelector(".bar-name").textContent=name;
+    row.querySelector(".bar-val").textContent=ok+"／5問";
+    bars.appendChild(row);
+    requestAnimationFrame(()=>{
+      row.querySelector(".bar-fill").style.width=(ok/5*100)+"%";
+    });
+  });
+
+  const dots=$("dots");
+  dots.innerHTML="";
+  results.forEach((r,i)=>{
+    const d=document.createElement("div");
+    d.className="dot "+(r.correct?"ok":"ng");
+    d.innerHTML="<b></b><i></i>";
+    d.querySelector("b").textContent=i+1;
+    d.querySelector("i").textContent=r.correct?"○":"✗";
+    dots.appendChild(d);
+  });
+  show("scr-result");
+}
+
+$("btn-start").addEventListener("click",()=>{
+  idx=0;results=[];
+  show("scr-quiz");
+  renderQuestion();
+});
+$("btn-next").addEventListener("click",()=>{
+  if(idx===QUESTIONS.length-1){renderResult();return}
+  idx++;
+  renderQuestion();
+});
+$("btn-retry").addEventListener("click",()=>{
+  idx=0;results=[];
+  show("scr-cover");
+});
+</script>
