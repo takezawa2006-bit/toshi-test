@@ -24,6 +24,7 @@
   --critical:    #d03b3b;
   --ghost:       rgba(11,11,11,0.04);
   --shadow:      0 1px 2px rgba(11,11,11,0.05);
+  --cagr:        #c2255c;
 }
 @media (prefers-color-scheme: dark){
   :root:where(:not([data-theme="light"])){
@@ -41,6 +42,7 @@
     --good-ink:  #0ca30c;
     --ghost:     rgba(255,255,255,0.06);
     --shadow:    none;
+    --cagr:      #f06595;
   }
 }
 :root[data-theme="dark"]{
@@ -58,6 +60,7 @@
   --good-ink:  #0ca30c;
   --ghost:     rgba(255,255,255,0.06);
   --shadow:    none;
+  --cagr:      #f06595;
 }
 
 *{box-sizing:border-box}
@@ -150,7 +153,8 @@ h1{font-size:22px;font-weight:650;margin:0;letter-spacing:.01em}
 .stat{background:var(--surface);padding:14px 16px 16px}
 .stat .k{font-size:11.5px;color:var(--muted);margin:0}
 .stat .v{font-size:21px;font-weight:620;margin:3px 0 0;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.stat .v.pos{color:var(--good-ink)}
+.stat .v .pos{color:var(--good-ink)}
+.stat .v .cagr{font-size:13px;font-weight:700;color:var(--cagr);margin-left:7px;letter-spacing:0;white-space:nowrap}
 .stat .d{font-size:11.5px;color:var(--muted);margin:1px 0 0}
 
 /* ---------- chart ---------- */
@@ -237,7 +241,7 @@ tr.fc td{color:var(--muted)}
       <div class="stats">
         <div class="stat">
           <p class="k">10年で株価は</p>
-          <p class="v" id="sTimes">—</p>
+          <p class="v"><span id="sTimes">—</span><span class="cagr" id="sCagr"></span></p>
           <p class="d" id="sTimesD">10年前の月終値との比較</p>
         </div>
         <div class="stat">
@@ -592,7 +596,10 @@ function render(){
 
   var times = last.c / first.c;
   $('sTimes').textContent = (Math.round(times*10)/10).toFixed(1) + '倍';
-  $('sTimes').className = 'v' + (times >= 1 ? ' pos' : '');
+  $('sTimes').className = times >= 1 ? 'pos' : '';
+  var yearsSpan = (prices.length - 1) / 12;
+  var cagr = yearsSpan > 0 ? (Math.pow(times, 1/yearsSpan) - 1) * 100 : null;
+  $('sCagr').textContent = cagr != null ? '年率' + (cagr >= 0 ? '+' : '') + cagr.toFixed(1) + '％' : '';
   $('sTimesD').textContent = monLabel(first.d) + 'の' + comma(first.c) + '円から';
 
   var lastRow = rows.length ? rows[rows.length-1] : null;
