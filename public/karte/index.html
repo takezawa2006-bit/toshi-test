@@ -180,6 +180,7 @@ td{border-bottom:1px solid var(--grid);color:var(--ink-2)}
 th:first-child,td:first-child{text-align:left}
 tbody tr:hover td{background:var(--ghost)}
 td.tot{color:var(--ink);font-weight:600}
+tr.fc td{color:var(--muted)}
 
 .foot{margin-top:26px;font-size:11.5px;color:var(--muted);line-height:1.8}
 .foot p{margin:0 0 4px}
@@ -252,7 +253,7 @@ td.tot{color:var(--ink);font-weight:600}
         <div class="stat">
           <p class="k">PEGレシオ</p>
           <p class="v" id="sPeg">—</p>
-          <p class="d" id="sPegD">PER÷EPS成長率（3年平均）</p>
+          <p class="d" id="sPegD">PER÷EPS成長率（今後2期予想）</p>
         </div>
       </div>
     </section>
@@ -300,7 +301,7 @@ td.tot{color:var(--ink);font-weight:600}
       <div class="chart-head">
         <div>
           <p class="card-title">PEGレシオの推移（年度末）</p>
-          <p class="card-note" style="margin:2px 0 0">PER÷EPS成長率（直近3期の年平均、％）。単位：倍</p>
+          <p class="card-note" style="margin:2px 0 0">PER÷EPS成長率（当期から2期先までの年平均、％）。単位：倍</p>
         </div>
       </div>
       <div class="chart-box" id="boxPeg">
@@ -311,7 +312,7 @@ td.tot{color:var(--ink);font-weight:600}
 
     <section class="card">
       <p class="card-title">年度データ一覧</p>
-      <p class="card-note">4つのグラフのもとになっている数値です。</p>
+      <p class="card-note">4つのグラフのもとになっている数値です。下段の薄い行は、公表されている予想EPSです。</p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -323,7 +324,8 @@ td.tot{color:var(--ink);font-weight:600}
     </section>
 
     <div class="foot">
-      <p>※ EPS成長率は直近3期の年平均成長率（年率換算）です。EPSがマイナスの期などは、PER・PEGを「—」表示にしています。</p>
+      <p>※ EPS成長率は、その期の実績EPSから2期先までの年平均成長率です。直近の期は今期・来期の予想EPS（会社公表を優先、無い期は四季報予想）を、過去の期はその後の実績EPSを使って計算しています。EPSがマイナスの期などは、PER・PEGを「—」表示にしています。</p>
+      <p>※ 一覧表の予想行のPERは、現在の株価÷予想EPSで計算した予想PERです。</p>
       <p>※ 株価は株式分割・併合を調整した月次終値、EPSは本決算の実績値を使う前提です。</p>
       <p>※ 過去の推移であり、将来の運用成果を示すものではありません。投資の最終判断はご自身でお願いします。</p>
       <p id="footSrc">データ：—</p>
@@ -356,10 +358,17 @@ function monLabel(d){ // "2016-10" → "2016年10月"
   return p[0] + '年' + parseInt(p[1],10) + '月';
 }
 
-/* ---------- 派生値の計算 ---------- */
+/* ---------- 派生値の計算 ----------
+   EPS成長率は「当期から2期先までの年平均成長率」。
+   直近の期は今期・来期の予想EPS（forecast配列）を、
+   過去の期はその後の実績EPSを使って同じ式で計算する。 */
 function derive(st){
   var priceMap = {};
   st.prices.forEach(function(p){ priceMap[p.d] = p.c; });
+
+  var fc = st.forecast || [];
+  // 実績+予想をつないだEPSの延長列
+  var S = st.eps.map(function(e){ return e.v; }).concat(fc.map(function(f){ return f.v; }));
 
   var rows = st.eps.map(function(e, i){
     var p = String(e.fy).split('.');
@@ -372,13 +381,13 @@ function derive(st){
     }
     var per = (price != null && e.v > 0) ? price / e.v : null;
     var g = null;
-    if (i >= 3 && e.v > 0 && st.eps[i-3].v > 0){
-      g = (Math.pow(e.v / st.eps[i-3].v, 1/3) - 1) * 100;
+    if (i + 2 < S.length && e.v > 0 && S[i+2] > 0){
+      g = (Math.pow(S[i+2] / e.v, 1/2) - 1) * 100;
     }
     var peg = (per != null && g != null && g > 0) ? per / g : null;
     return { fy: e.fy, eps: e.v, price: price, per: per, growth: g, peg: peg };
   });
-  return rows;
+  return { rows: rows, fc: fc, S: S };
 }
 
 /* ---------- 目盛り ---------- */
@@ -564,7 +573,8 @@ function currentStock(){
 function render(){
   var st = currentStock();
   if (!st) return;
-  var rows = derive(st);
+  var dv = derive(st);
+  var rows = dv.rows;
   var prices = st.prices;
   var last = prices[prices.length-1];
   var first = prices[0];
@@ -621,7 +631,7 @@ function render(){
     tipRows: function(i){
       var r = rows[i];
       var out = [{ n:'EPS（実績）', v: fmtEps(r.eps), color:'var(--series-1)' }];
-      if (r.growth != null) out.push({ n:'成長率（3年平均）', v: fmtPct(r.growth) });
+      if (r.growth != null) out.push({ n:'成長率（2期先まで）', v: fmtPct(r.growth) });
       return out;
     }
   });
@@ -667,7 +677,7 @@ function render(){
     }
   });
 
-  // 表
+  // 表（実績の下に、公表されている予想を並べる）
   var tb = $('tbody');
   tb.innerHTML = '';
   rows.forEach(function(r){
@@ -681,6 +691,26 @@ function render(){
     ].forEach(function(txt, i){
       var td = document.createElement('td');
       if (i === 5) td.className = 'tot';
+      td.textContent = txt;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  dv.fc.forEach(function(f, j){
+    var ext = rows.length + j;
+    var prev = dv.S[ext - 1];
+    var gy = (prev > 0 && f.v > 0) ? (f.v / prev - 1) * 100 : null;
+    var perF = (f.v > 0) ? last.c / f.v : null;
+    var tr = document.createElement('tr');
+    tr.className = 'fc';
+    [ fyLabel(f.fy) + '（' + (f.src || '') + '予想）',
+      '—',
+      fmtEps(f.v),
+      fmtPct(gy),
+      fmtPer(perF),
+      '—'
+    ].forEach(function(txt){
+      var td = document.createElement('td');
       td.textContent = txt;
       tr.appendChild(td);
     });
