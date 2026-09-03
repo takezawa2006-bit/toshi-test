@@ -327,11 +327,11 @@ const APPS = [
     repo: "https://github.com/takezawa2006-bit/takezazwaCC/tree/main/tsumitate-sim",
   },
   {
-    cat: "play", status: "repo", date: "",
-    title: "テトリス",
-    desc: "Claude Codeの動作実験を兼ねて作ったテトリス。息抜き用のお楽しみ作品。",
+    cat: "tool", status: "unknown", date: "",
+    title: "銘柄かるた",
+    desc: "かるた遊びの形で銘柄に親しむ学習ゲーム。公開URLを確認中です。判明したらここに差し込みます。",
     url: null,
-    repo: "https://github.com/takezawa2006-bit/takezazwaCC/tree/main/tetris",
+    repo: null,
   },
 ];
 
@@ -339,6 +339,7 @@ const STATUS = {
   live:  { label: "公開中",       cls: "live"  },
   check: { label: "公開設定要確認", cls: "check" },
   repo:  { label: "リポジトリ内",   cls: "repo"  },
+  unknown: { label: "URL確認中",    cls: "check" },
 };
 
 let activeCat = "all";
