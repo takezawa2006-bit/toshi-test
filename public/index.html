@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>投資実力テスト｜たけざわ投資塾</title>
+<meta name="description" content="入門編からアドバンス編まで、あなたの投資力を段階的に測る、たけざわ投資塾の投資実力テスト。4択15問・約5分、無料で受けられます。">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+[hidden]{display:none!important}
+:root{
+  --paper:#F5F5F0;
+  --card:#FCFCF9;
+  --ink:#1C2433;
+  --ink-soft:#5A6377;
+  --line:#D9D9CF;
+  --line-faint:#E7E7DE;
+  --navy:#1E3A5F;
+  --navy-deep:#152C4A;
+  --navy-ink:#FFFFFF;
+  --gold:#A8842C;
+  --gold-soft:#CBB273;
+  --shu:#B3341F;
+  --shadow:0 1px 2px rgba(28,36,51,.06),0 8px 28px rgba(28,36,51,.07);
+  --focus:#A8842C;
+}
+:root:not([data-theme="light"]){color-scheme:light}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#10141C;
+    --card:#171D2A;
+    --ink:#E9E6DC;
+    --ink-soft:#9AA3B4;
+    --line:#303A4D;
+    --line-faint:#242D3D;
+    --navy:#3D5F8C;
+    --navy-deep:#33517A;
+    --navy-ink:#F4F6F9;
+    --gold:#C9A55A;
+    --gold-soft:#8A7440;
+    --shu:#D25B42;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    --focus:#C9A55A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#10141C;
+  --card:#171D2A;
+  --ink:#E9E6DC;
+  --ink-soft:#9AA3B4;
+  --line:#303A4D;
+  --line-faint:#242D3D;
+  --navy:#3D5F8C;
+  --navy-deep:#33517A;
+  --navy-ink:#F4F6F9;
+  --gold:#C9A55A;
+  --gold-soft:#8A7440;
+  --shu:#D25B42;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --focus:#C9A55A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  font-size:16px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.serif{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+@media(min-width:720px){.wrap{padding:40px 24px 64px}}
+.card{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  padding:32px 20px 34px;
+}
+.card::before{
+  content:"";position:absolute;inset:7px;
+  border:1px solid var(--line-faint);
+  border-radius:5px;pointer-events:none;
+}
+@media(min-width:720px){.card{padding:46px 48px 48px}}
+.head{text-align:center}
+.brand{
+  font-size:12px;letter-spacing:.42em;text-indent:.42em;
+  color:var(--ink-soft);font-weight:500;
+}
+.brand-rule{width:56px;height:1px;background:var(--gold);margin:14px auto 22px}
+.site-title{
+  font-size:clamp(28px,7.4vw,36px);
+  font-weight:700;letter-spacing:.2em;text-indent:.2em;
+  line-height:1.4;
+}
+.site-lead{
+  margin:14px auto 0;max-width:26em;
+  font-size:14.5px;color:var(--ink-soft);
+}
+.sec-title{
+  font-size:12.5px;letter-spacing:.34em;text-indent:.34em;
+  color:var(--gold);font-weight:600;
+  margin:38px 0 14px;text-align:center;
+}
+.list{list-style:none;display:flex;flex-direction:column;gap:10px;position:relative}
+.row{
+  display:flex;align-items:center;gap:14px;
+  border:1px solid var(--line);border-radius:6px;
+  padding:14px 16px;
+  color:inherit;text-decoration:none;
+  transition:border-color .15s ease,background .15s ease;
+}
+a.row:hover{border-color:var(--navy);background:rgba(30,58,95,.05)}
+a.row:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.row-main{flex:1 1 auto;min-width:0}
+.row-name{font-weight:700;font-size:15.5px;letter-spacing:.04em}
+.row-desc{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.row-meta{flex:0 0 auto;font-size:12.5px;white-space:nowrap}
+.go{
+  color:var(--navy);font-weight:700;letter-spacing:.14em;
+}
+a.row .go::after{content:"→";margin-left:6px}
+.soon{
+  color:var(--ink-soft);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:3px 12px;
+  letter-spacing:.14em;text-indent:.06em;
+}
+.row.is-soon{background:transparent;opacity:.72}
+.senmon{
+  text-align:center;font-size:13.5px;color:var(--ink-soft);
+  margin-top:6px;
+}
+.ending{
+  margin-top:44px;padding-top:34px;
+  border-top:1px double var(--line);
+  text-align:center;
+}
+.ending-main{
+  font-size:clamp(19px,5vw,22px);
+  font-weight:700;letter-spacing:.14em;text-indent:.14em;
+  text-wrap:balance;
+}
+.ending-sub{margin:12px auto 24px;font-size:14.5px;max-width:24em}
+.cta{display:flex;flex-direction:column;gap:12px;max-width:420px;margin:0 auto}
+.btn{
+  display:flex;align-items:center;justify-content:center;
+  font-size:15.5px;font-weight:700;letter-spacing:.12em;text-indent:.12em;
+  border-radius:6px;padding:14px 24px;
+  text-decoration:none;border:1px solid transparent;
+  transition:background .15s ease;
+}
+.btn-primary{background:var(--navy);color:var(--navy-ink)}
+.btn-primary:hover{background:var(--navy-deep)}
+.btn-ghost{background:transparent;color:var(--navy);border-color:var(--navy)}
+.btn-ghost:hover{background:rgba(30,58,95,.07)}
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.cta-note{font-size:12.5px;color:var(--ink-soft);margin-top:10px;letter-spacing:.06em}
+.foot{
+  text-align:center;margin-top:34px;
+  font-size:12px;color:var(--ink-soft);letter-spacing:.14em;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="head">
+      <p class="brand">たけざわ投資塾</p>
+      <div class="brand-rule"></div>
+      <h1 class="site-title serif">投資実力テスト</h1>
+      <p class="site-lead">入門編からアドバンス編まで、あなたの投資力を段階的に測る実力テストです。4択15問・約5分、どなたでも無料で受けられます。</p>
+    </div>
+
+    <p class="sec-title serif">基幹コース</p>
+    <ul class="list">
+      <li><a class="row" href="tests/nyumon-1/">
+        <span class="row-main">
+          <span class="row-name serif">入門編　その1</span>
+          <span class="row-desc" style="display:block">投資のきほんと4K企業投資の入口</span>
+        </span>
+        <span class="row-meta go serif">受験する</span>
+      </a></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">入門編　その2</span>
+          <span class="row-desc" style="display:block">株の売買と制度のきほん</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">初級編　その1</span>
+          <span class="row-desc" style="display:block">決算書のきほん</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">初級編　その2</span>
+          <span class="row-desc" style="display:block">投資指標のきほん</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">中級編　その1</span>
+          <span class="row-desc" style="display:block">4K基準のスクリーニング実践</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">中級編　その2</span>
+          <span class="row-desc" style="display:block">事業内容と経営力の評価</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">上級編　その1</span>
+          <span class="row-desc" style="display:block">財務分析の深掘り</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">上級編　その2</span>
+          <span class="row-desc" style="display:block">バリュエーションと売買判断</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">アドバンス編　その1</span>
+          <span class="row-desc" style="display:block">総合ケーススタディ</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+      <li><span class="row is-soon">
+        <span class="row-main">
+          <span class="row-name serif">アドバンス編　その2</span>
+          <span class="row-desc" style="display:block">市況対応と投資哲学</span>
+        </span>
+        <span class="row-meta soon">準備中</span>
+      </span></li>
+    </ul>
+
+    <p class="sec-title serif">専門編</p>
+    <p class="senmon">外国株編・AI投資編・半導体編など、テーマ別のテストを順次拡充していきます。</p>
+
+    <div class="ending">
+      <p class="ending-main serif">学ばない投資は危険です。</p>
+      <p class="ending-sub">あなたも投資を体系的に、4K企業投資を学びませんか？</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://taiken-koza.vercel.app" target="_blank" rel="noopener">無料体験講座を見る</a>
+        <a class="btn btn-ghost" href="https://takezawa-toushi.com/p/r/jWJO8Kuc" target="_blank" rel="noopener">12日間の無料ステップメール講座に登録する</a>
+      </div>
+      <p class="cta-note">どちらも無料でご参加いただけます</p>
+    </div>
+
+    <p class="foot">監修　武沢信行（たけざわ投資塾塾長）</p>
+  </div>
+</div>
+</body>
+</html>
