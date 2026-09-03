@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>銘柄カルテ | たけざわ投資塾</title>
+<style>
+:root{
+  color-scheme: light;
+  --page:        #f9f9f7;
+  --surface:     #fcfcfb;
+  --ink:         #0b0b0b;
+  --ink-2:       #52514e;
+  --muted:       #898781;
+  --grid:        #e1e0d9;
+  --axis:        #c3c2b7;
+  --border:      rgba(11,11,11,0.10);
+  --series-1:    #2a78d6;
+  --series-2:    #eb6834;
+  --good:        #0ca30c;
+  --good-ink:    #006300;
+  --warning:     #fab219;
+  --critical:    #d03b3b;
+  --ghost:       rgba(11,11,11,0.04);
+  --shadow:      0 1px 2px rgba(11,11,11,0.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --page:      #0d0d0d;
+    --surface:   #1a1a19;
+    --ink:       #ffffff;
+    --ink-2:     #c3c2b7;
+    --muted:     #898781;
+    --grid:      #2c2c2a;
+    --axis:      #383835;
+    --border:    rgba(255,255,255,0.10);
+    --series-1:  #3987e5;
+    --series-2:  #d95926;
+    --good-ink:  #0ca30c;
+    --ghost:     rgba(255,255,255,0.06);
+    --shadow:    none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:      #0d0d0d;
+  --surface:   #1a1a19;
+  --ink:       #ffffff;
+  --ink-2:     #c3c2b7;
+  --muted:     #898781;
+  --grid:      #2c2c2a;
+  --axis:      #383835;
+  --border:    rgba(255,255,255,0.10);
+  --series-1:  #3987e5;
+  --series-2:  #d95926;
+  --good-ink:  #0ca30c;
+  --ghost:     rgba(255,255,255,0.06);
+  --shadow:    none;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--page);
+  color:var(--ink);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", sans-serif;
+  font-size:14px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 64px}
+
+/* ---------- header ---------- */
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand .mark{
+  font-size:13px;letter-spacing:.14em;color:var(--series-1);font-weight:600;
+  border:1px solid var(--series-1);border-radius:999px;padding:2px 10px;line-height:1.5;
+}
+h1{font-size:22px;font-weight:650;margin:0;letter-spacing:.01em}
+.sub{color:var(--ink-2);font-size:13px;margin:4px 0 0}
+.theme-btn{
+  background:var(--surface);color:var(--ink-2);border:1px solid var(--border);
+  border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;font-family:inherit;
+}
+.theme-btn:hover{background:var(--ghost)}
+
+/* ---------- layout ---------- */
+.grid{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+@media (max-width:840px){.grid{grid-template-columns:1fr}}
+
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:20px;box-shadow:var(--shadow);
+}
+.card + .card{margin-top:20px}
+.card-title{font-size:13px;font-weight:650;margin:0 0 2px;letter-spacing:.02em}
+.card-note{font-size:12px;color:var(--muted);margin:0 0 16px}
+
+/* ---------- 銘柄選択 ---------- */
+.stocklist{display:flex;flex-direction:column;gap:8px}
+.stockbtn{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--page);color:var(--ink);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;font-family:inherit;font-size:14px;
+  cursor:pointer;text-align:left;
+}
+.stockbtn:hover{background:var(--ghost)}
+.stockbtn[aria-pressed="true"]{
+  border-color:var(--series-1);outline:1px solid var(--series-1);
+  background:var(--surface);
+}
+.stockbtn .nm{font-weight:620}
+.stockbtn .cd{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
+.glossary p{font-size:12px;color:var(--ink-2);margin:0 0 10px;line-height:1.7}
+.glossary p:last-child{margin-bottom:0}
+.glossary b{font-weight:650;color:var(--ink)}
+
+/* ---------- サンプル注意 ---------- */
+.warn{
+  display:flex;gap:10px;align-items:flex-start;
+  border:1px solid var(--warning);border-radius:12px;
+  padding:14px 16px;margin-bottom:20px;background:var(--surface);
+}
+.warn .ic{
+  width:18px;height:18px;border-radius:50%;flex:none;margin-top:2px;
+  background:var(--warning);color:#0b0b0b;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+}
+.warn .h{font-size:13px;font-weight:650;margin:0}
+.warn .b{font-size:12px;color:var(--ink-2);margin:2px 0 0}
+
+/* ---------- hero + stats ---------- */
+.hero{padding:22px 24px 20px}
+.hero .label{font-size:13px;color:var(--ink-2);margin:0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hero .label .meta{color:var(--muted);font-size:12px}
+.hero .value{
+  font-size:52px;font-weight:650;line-height:1.1;margin:6px 0 0;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+.hero .value .u{font-size:26px;font-weight:600;margin-left:2px;letter-spacing:0}
+.hero .yen{font-size:13px;color:var(--muted);margin:6px 0 0;font-variant-numeric:tabular-nums}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);
+  border-top:1px solid var(--border);margin:20px -24px -20px;border-radius:0 0 12px 12px;overflow:hidden}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--surface);padding:14px 16px 16px}
+.stat .k{font-size:11.5px;color:var(--muted);margin:0}
+.stat .v{font-size:21px;font-weight:620;margin:3px 0 0;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.stat .v.pos{color:var(--good-ink)}
+.stat .d{font-size:11.5px;color:var(--muted);margin:1px 0 0}
+
+/* ---------- chart ---------- */
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.chart-box{position:relative}
+svg.chart{display:block;width:100%;height:auto;overflow:visible}
+svg.chart text{font-family:inherit}
+.hit{fill:transparent;cursor:crosshair;outline:none}
+
+.tip{
+  position:absolute;pointer-events:none;opacity:0;transition:opacity .08s;
+  background:var(--surface);border:1px solid var(--border);border-radius:9px;
+  padding:9px 11px;box-shadow:0 4px 14px rgba(11,11,11,0.12);min-width:150px;z-index:5;
+}
+.tip .t{font-size:11.5px;color:var(--muted);margin:0 0 5px}
+.tip .row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:3px}
+.tip .row .n{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2)}
+.tip .row .n i{width:12px;height:2px;border-radius:1px;display:block;flex:none}
+.tip .row .val{font-size:13px;font-weight:620;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---------- table ---------- */
+.table-wrap{overflow-x:auto;margin-top:2px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13px}
+th,td{padding:7px 12px;text-align:right;white-space:nowrap}
+th{color:var(--muted);font-weight:550;font-size:11.5px;border-bottom:1px solid var(--axis)}
+td{border-bottom:1px solid var(--grid);color:var(--ink-2)}
+th:first-child,td:first-child{text-align:left}
+tbody tr:hover td{background:var(--ghost)}
+td.tot{color:var(--ink);font-weight:600}
+
+.foot{margin-top:26px;font-size:11.5px;color:var(--muted);line-height:1.8}
+.foot p{margin:0 0 4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <div class="brand">
+      <span class="mark">たけざわ投資塾</span>
+      <h1>銘柄カルテ</h1>
+    </div>
+    <p class="sub">個別銘柄の10年推移を、株価・EPS・PER・PEGレシオの4つの目で診ます。</p>
+  </div>
+  <button class="theme-btn" id="themeBtn" type="button">画面を暗くする</button>
+</header>
+
+<div class="grid">
+
+  <!-- ============ 銘柄選択 ============ -->
+  <div>
+    <section class="card">
+      <p class="card-title">銘柄を選ぶ</p>
+      <p class="card-note">カルテを見たい銘柄を選んでください。</p>
+      <div class="stocklist" id="stocklist"></div>
+    </section>
+
+    <section class="card glossary">
+      <p class="card-title" style="margin-bottom:10px">4つの目の見方</p>
+      <p><b>株価</b>　月ごとの終値。10年でどれだけ育ったか。</p>
+      <p><b>EPS</b>　1株あたり利益（実績）。企業の稼ぐ力そのもの。</p>
+      <p><b>PER</b>　年度末株価÷EPS。利益の何年分まで買われているか。</p>
+      <p><b>PEGレシオ</b>　PER÷EPS成長率。成長の速さまで含めた割高割安の目安で、1倍前後なら成長に見合った株価とされます。</p>
+    </section>
+  </div>
+
+  <!-- ============ カルテ ============ -->
+  <div>
+    <div class="warn" id="sampleWarn" hidden>
+      <span class="ic">!</span>
+      <div>
+        <p class="h">現在はサンプルデータ（架空の数値）を表示しています</p>
+        <p class="b">画面の動きを確認するための仮の数値です。実際の株価・EPSではありません。実データの取り込みが済むと、この表示は消えます。</p>
+      </div>
+    </div>
+
+    <section class="card hero">
+      <p class="label"><span id="heroName">—</span><span class="meta" id="heroMeta"></span></p>
+      <p class="value"><span id="heroVal">0</span><span class="u">円</span></p>
+      <p class="yen" id="heroAsof">—</p>
+
+      <div class="stats">
+        <div class="stat">
+          <p class="k">10年で株価は</p>
+          <p class="v" id="sTimes">—</p>
+          <p class="d" id="sTimesD">10年前の月終値との比較</p>
+        </div>
+        <div class="stat">
+          <p class="k">最新EPS（実績）</p>
+          <p class="v" id="sEps">—</p>
+          <p class="d" id="sEpsD">直近本決算の1株利益</p>
+        </div>
+        <div class="stat">
+          <p class="k">PER</p>
+          <p class="v" id="sPer">—</p>
+          <p class="d">最新株価÷最新EPS</p>
+        </div>
+        <div class="stat">
+          <p class="k">PEGレシオ</p>
+          <p class="v" id="sPeg">—</p>
+          <p class="d" id="sPegD">PER÷EPS成長率（3年平均）</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="chart-head">
+        <div>
+          <p class="card-title">株価の推移（月次終値・10年）</p>
+          <p class="card-note" style="margin:2px 0 0">単位：円</p>
+        </div>
+      </div>
+      <div class="chart-box" id="boxPrice">
+        <svg class="chart" id="svgPrice" role="img" aria-label="株価の10年推移の折れ線グラフ"></svg>
+        <div class="tip" id="tipPrice" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="chart-head">
+        <div>
+          <p class="card-title">EPSの推移（年度・実績）</p>
+          <p class="card-note" style="margin:2px 0 0" id="noteEps">単位：円</p>
+        </div>
+      </div>
+      <div class="chart-box" id="boxEps">
+        <svg class="chart" id="svgEps" role="img" aria-label="EPSの年度推移の棒グラフ"></svg>
+        <div class="tip" id="tipEps" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="chart-head">
+        <div>
+          <p class="card-title">PERの推移（年度末）</p>
+          <p class="card-note" style="margin:2px 0 0">年度末月の終値÷その期のEPS。単位：倍</p>
+        </div>
+      </div>
+      <div class="chart-box" id="boxPer">
+        <svg class="chart" id="svgPer" role="img" aria-label="PERの年度推移の折れ線グラフ"></svg>
+        <div class="tip" id="tipPer" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="chart-head">
+        <div>
+          <p class="card-title">PEGレシオの推移（年度末）</p>
+          <p class="card-note" style="margin:2px 0 0">PER÷EPS成長率（直近3期の年平均、％）。単位：倍</p>
+        </div>
+      </div>
+      <div class="chart-box" id="boxPeg">
+        <svg class="chart" id="svgPeg" role="img" aria-label="PEGレシオの年度推移の折れ線グラフ"></svg>
+        <div class="tip" id="tipPeg" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="card-title">年度データ一覧</p>
+      <p class="card-note">4つのグラフのもとになっている数値です。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>年度</th><th>年度末株価</th><th>EPS</th><th>EPS成長率※</th><th>PER</th><th>PEG</th></tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="foot">
+      <p>※ EPS成長率は直近3期の年平均成長率（年率換算）です。EPSがマイナスの期などは、PER・PEGを「—」表示にしています。</p>
+      <p>※ 株価は株式分割・併合を調整した月次終値、EPSは本決算の実績値を使う前提です。</p>
+      <p>※ 過去の推移であり、将来の運用成果を示すものではありません。投資の最終判断はご自身でお願いします。</p>
+      <p id="footSrc">データ：—</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+
+var DATA = window.KARTE_DATA || { sample:true, stocks:[] };
+var $ = function(id){ return document.getElementById(id); };
+
+/* ---------- 書式 ---------- */
+function comma(n){ return Math.round(n).toLocaleString('ja-JP'); }
+function fmtYen(v){ return comma(v) + '円'; }
+function fmtEps(v){ return (Math.round(v*10)/10).toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1}) + '円'; }
+function fmtPer(v){ return v == null ? '—' : (Math.round(v*10)/10).toFixed(1) + '倍'; }
+function fmtPeg(v){ return v == null ? '—' : (Math.round(v*100)/100).toFixed(2) + '倍'; }
+function fmtPct(v){ return v == null ? '—' : (v>=0?'+':'') + (Math.round(v*10)/10).toFixed(1) + '％'; }
+function fyLabel(fy){ // "2017.6" → "2017年6月期"
+  var p = String(fy).split('.');
+  return p[0] + '年' + p[1] + '月期';
+}
+function monLabel(d){ // "2016-10" → "2016年10月"
+  var p = d.split('-');
+  return p[0] + '年' + parseInt(p[1],10) + '月';
+}
+
+/* ---------- 派生値の計算 ---------- */
+function derive(st){
+  var priceMap = {};
+  st.prices.forEach(function(p){ priceMap[p.d] = p.c; });
+
+  var rows = st.eps.map(function(e, i){
+    var p = String(e.fy).split('.');
+    var key = p[0] + '-' + ('0' + p[1]).slice(-2);
+    var price = priceMap[key];
+    if (price == null){ // 該当月が無ければ直前の月を探す
+      for (var k = st.prices.length - 1; k >= 0; k--){
+        if (st.prices[k].d <= key){ price = st.prices[k].c; break; }
+      }
+    }
+    var per = (price != null && e.v > 0) ? price / e.v : null;
+    var g = null;
+    if (i >= 3 && e.v > 0 && st.eps[i-3].v > 0){
+      g = (Math.pow(e.v / st.eps[i-3].v, 1/3) - 1) * 100;
+    }
+    var peg = (per != null && g != null && g > 0) ? per / g : null;
+    return { fy: e.fy, eps: e.v, price: price, per: per, growth: g, peg: peg };
+  });
+  return rows;
+}
+
+/* ---------- 目盛り ---------- */
+function niceTicks(max){
+  if (max <= 0) return { top: 1, step: 0.25 };
+  var raw = max/5;
+  var exp = Math.pow(10, Math.floor(Math.log10(raw)));
+  var x = raw/exp, n;
+  if (x <= 1) n = 1; else if (x <= 2) n = 2; else if (x <= 2.5) n = 2.5;
+  else if (x <= 5) n = 5; else n = 10;
+  var step = n * exp;
+  var top = step * Math.ceil(max/step);
+  if (max/top > 0.9) top += step;
+  return { top: top, step: step };
+}
+function tickText(v, step){
+  if (step >= 1) return comma(v);
+  return (Math.round(v*100)/100).toString();
+}
+function barPath(x, y, w, h, r){
+  if (h <= 0) return '';
+  r = Math.min(r, w/2, h);
+  return 'M' + x + ',' + (y+h) +
+         'L' + x + ',' + (y+r) +
+         'Q' + x + ',' + y + ' ' + (x+r) + ',' + y +
+         'L' + (x+w-r) + ',' + y +
+         'Q' + (x+w) + ',' + y + ' ' + (x+w) + ',' + (y+r) +
+         'L' + (x+w) + ',' + (y+h) + 'Z';
+}
+function outlined(txt){ // 直接ラベル用の縁取り
+  return 'stroke="var(--surface)" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round"';
+}
+
+/* ---------- 汎用チャート描画 ----------
+   cfg: { box, svg, tip, points:[{label, v}], type:'line'|'bar',
+          fmt(値の書式), lastLabel(直接ラベル文字列), xEvery(何点ごとにX軸ラベル),
+          ref:{v,label}, tipRows(i)->[{n,v,color}] }             */
+function drawChart(cfg){
+  var box = $(cfg.box), svg = $(cfg.svg), tipEl = $(cfg.tip);
+  var pts = cfg.points;
+  var n = pts.length;
+  var W = Math.max(320, box.clientWidth);
+  var H = 300;
+  var padL = 56, padR = 20, padT = 24, padB = 34;
+  var pw = W - padL - padR, ph = H - padT - padB;
+  var y0 = padT + ph;
+
+  var max = 0;
+  pts.forEach(function(p){ if (p.v != null && p.v > max) max = p.v; });
+  if (cfg.ref && cfg.ref.v > max*0.9) max = Math.max(max, cfg.ref.v);
+  var tk = niceTicks(max);
+  var yOf = function(v){ return y0 - (v/tk.top)*ph; };
+  var band = pw/n;
+  var xOf = function(i){ return padL + band*(i+0.5); };
+
+  var s = '';
+  for (var v = 0; v <= tk.top*1.0001; v += tk.step){
+    var yy = yOf(v);
+    s += '<line x1="'+padL+'" y1="'+yy+'" x2="'+(padL+pw)+'" y2="'+yy+'" stroke="var(--grid)" stroke-width="1"/>';
+    s += '<text x="'+(padL-10)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="var(--muted)" ' +
+         'style="font-variant-numeric:tabular-nums">' + tickText(v, tk.step) + '</text>';
+  }
+  s += '<line x1="'+padL+'" y1="'+y0+'" x2="'+(padL+pw)+'" y2="'+y0+'" stroke="var(--axis)" stroke-width="1"/>';
+
+  if (cfg.type === 'bar'){
+    var bw = Math.min(30, Math.max(4, band*0.6));
+    pts.forEach(function(p, i){
+      if (p.v == null || p.v <= 0) return;
+      var h = (p.v/tk.top)*ph;
+      s += '<path d="' + barPath(xOf(i)-bw/2, y0-h, bw, h, 4) + '" fill="var(--series-1)"/>';
+    });
+  } else {
+    var d = '', open = false;
+    pts.forEach(function(p, i){
+      if (p.v == null){ open = false; return; }
+      d += (open ? 'L' : 'M') + xOf(i).toFixed(1) + ',' + yOf(p.v).toFixed(1);
+      open = true;
+    });
+    s += '<path d="'+d+'" fill="none" stroke="var(--series-1)" stroke-width="2" ' +
+         'stroke-linejoin="round" stroke-linecap="round"/>';
+    if (cfg.markers){
+      pts.forEach(function(p, i){
+        if (p.v == null) return;
+        s += '<circle cx="'+xOf(i)+'" cy="'+yOf(p.v)+'" r="4" fill="var(--series-1)" ' +
+             'stroke="var(--surface)" stroke-width="2"/>';
+      });
+    }
+  }
+
+  if (cfg.ref && cfg.ref.v <= tk.top){
+    var ry = yOf(cfg.ref.v);
+    s += '<line x1="'+padL+'" y1="'+ry+'" x2="'+(padL+pw)+'" y2="'+ry+'" stroke="var(--ink-2)" ' +
+         'stroke-width="1" stroke-dasharray="5 4"/>';
+    s += '<text x="'+(padL+3)+'" y="'+(ry-7)+'" text-anchor="start" font-size="11" fill="var(--ink-2)" ' +
+         outlined() + '>' + cfg.ref.label + '</text>';
+  }
+
+  // 最新値だけ直接ラベル
+  var lastIdx = -1;
+  for (var q = n-1; q >= 0; q--){ if (pts[q].v != null){ lastIdx = q; break; } }
+  if (lastIdx >= 0 && cfg.lastLabel){
+    var lx = Math.min(xOf(lastIdx), padL + pw);
+    var ly = yOf(pts[lastIdx].v) - 12;
+    if (ly < padT + 8) ly = padT + 8;
+    s += '<text x="'+lx+'" y="'+ly+'" text-anchor="end" font-size="12" font-weight="640" fill="var(--ink)" ' +
+         outlined() + '>' + cfg.lastLabel + '</text>';
+  }
+
+  // X軸ラベル
+  var every = cfg.xEvery || 1;
+  pts.forEach(function(p, i){
+    if (!p.xtick) return;
+    s += '<text x="'+xOf(i)+'" y="'+(y0+18)+'" text-anchor="middle" font-size="11" fill="var(--muted)" ' +
+         'style="font-variant-numeric:tabular-nums">' + p.xtick + '</text>';
+  });
+
+  // あたり判定
+  pts.forEach(function(p, i){
+    s += '<rect class="hit" data-i="'+i+'" x="'+(padL+band*i)+'" y="'+padT+'" width="'+band+'" height="'+ph+'" ' +
+         'tabindex="-1" aria-hidden="true"/>';
+  });
+
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.innerHTML = s;
+
+  var hl = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  hl.setAttribute('y', padT); hl.setAttribute('height', ph);
+  hl.setAttribute('width', band); hl.setAttribute('fill', 'var(--ghost)');
+  hl.setAttribute('opacity', '0'); hl.setAttribute('pointer-events', 'none');
+  svg.insertBefore(hl, svg.firstChild);
+
+  function show(i){
+    var p = pts[i];
+    if (!p) return;
+    var rows = cfg.tipRows(i);
+    if (!rows) return;
+    var scale = box.clientWidth / W;
+    tipEl.innerHTML = '';
+    var t = document.createElement('p'); t.className = 't'; t.textContent = p.label;
+    tipEl.appendChild(t);
+    rows.forEach(function(r){
+      var d = document.createElement('div'); d.className = 'row';
+      var nn = document.createElement('span'); nn.className = 'n';
+      if (r.color){ var ii = document.createElement('i'); ii.style.background = r.color; nn.appendChild(ii); }
+      nn.appendChild(document.createTextNode(r.n));
+      var vv = document.createElement('span'); vv.className = 'val'; vv.textContent = r.v;
+      d.appendChild(nn); d.appendChild(vv);
+      tipEl.appendChild(d);
+    });
+    tipEl.style.opacity = '1';
+    hl.setAttribute('x', padL + band*i); hl.setAttribute('opacity', '1');
+    var cx = (padL + band*(i+0.5)) * scale;
+    var tw = tipEl.offsetWidth;
+    var left = Math.max(0, Math.min(cx - tw/2, box.clientWidth - tw));
+    tipEl.style.left = left + 'px';
+    tipEl.style.top = '6px';
+  }
+  function hide(){
+    tipEl.style.opacity = '0';
+    hl.setAttribute('opacity', '0');
+  }
+  Array.prototype.forEach.call(svg.querySelectorAll('.hit'), function(el){
+    var i = parseInt(el.getAttribute('data-i'), 10);
+    var f = function(){ show(i); };
+    el.addEventListener('pointerenter', f);
+    el.addEventListener('pointermove', f);
+    el.addEventListener('pointerleave', hide);
+  });
+}
+
+/* ---------- 画面更新 ---------- */
+var state = { code: null };
+
+function currentStock(){
+  for (var i = 0; i < DATA.stocks.length; i++){
+    if (DATA.stocks[i].code === state.code) return DATA.stocks[i];
+  }
+  return DATA.stocks[0];
+}
+
+function render(){
+  var st = currentStock();
+  if (!st) return;
+  var rows = derive(st);
+  var prices = st.prices;
+  var last = prices[prices.length-1];
+  var first = prices[0];
+
+  // 銘柄ボタン
+  Array.prototype.forEach.call(document.querySelectorAll('.stockbtn'), function(b){
+    b.setAttribute('aria-pressed', String(b.dataset.code === st.code));
+  });
+
+  // ヒーロー
+  $('heroName').textContent = st.name;
+  $('heroMeta').textContent = st.code + '　' + st.market + '　' + st.fyMonth + '月期決算';
+  $('heroVal').textContent = comma(last.c);
+  $('heroAsof').textContent = monLabel(last.d) + 'の終値';
+
+  var times = last.c / first.c;
+  $('sTimes').textContent = (Math.round(times*10)/10).toFixed(1) + '倍';
+  $('sTimes').className = 'v' + (times >= 1 ? ' pos' : '');
+  $('sTimesD').textContent = monLabel(first.d) + 'の' + comma(first.c) + '円から';
+
+  var lastRow = rows.length ? rows[rows.length-1] : null;
+  var curPer = null, curPeg = null;
+  if (lastRow){
+    $('sEps').textContent = fmtEps(lastRow.eps);
+    $('sEpsD').textContent = fyLabel(lastRow.fy);
+    if (lastRow.eps > 0) curPer = last.c / lastRow.eps;
+    if (curPer != null && lastRow.growth != null && lastRow.growth > 0) curPeg = curPer / lastRow.growth;
+  }
+  $('sPer').textContent = fmtPer(curPer);
+  $('sPeg').textContent = fmtPeg(curPeg);
+
+  // 株価チャート（年の1月にX軸ラベル、2年おき）
+  var pricePts = prices.map(function(p, i){
+    var yr = p.d.slice(0,4), mo = p.d.slice(5,7);
+    return {
+      label: monLabel(p.d), v: p.c,
+      xtick: (mo === '01' && parseInt(yr,10) % 2 === 0) ? yr : null
+    };
+  });
+  drawChart({
+    box:'boxPrice', svg:'svgPrice', tip:'tipPrice', type:'line',
+    points: pricePts, lastLabel: comma(last.c) + '円',
+    tipRows: function(i){ return [{ n:'終値', v: fmtYen(prices[i].c), color:'var(--series-1)' }]; }
+  });
+
+  // EPSチャート
+  var epsPts = rows.map(function(r){
+    return { label: fyLabel(r.fy), v: r.eps > 0 ? r.eps : null, xtick: String(r.fy).split('.')[0] };
+  });
+  drawChart({
+    box:'boxEps', svg:'svgEps', tip:'tipEps', type:'bar',
+    points: epsPts,
+    lastLabel: lastRow ? fmtEps(lastRow.eps) : '',
+    tipRows: function(i){
+      var r = rows[i];
+      var out = [{ n:'EPS（実績）', v: fmtEps(r.eps), color:'var(--series-1)' }];
+      if (r.growth != null) out.push({ n:'成長率（3年平均）', v: fmtPct(r.growth) });
+      return out;
+    }
+  });
+
+  // PERチャート
+  var perPts = rows.map(function(r){
+    return { label: fyLabel(r.fy), v: r.per, xtick: String(r.fy).split('.')[0] };
+  });
+  var lastPer = null;
+  rows.forEach(function(r){ if (r.per != null) lastPer = r.per; });
+  drawChart({
+    box:'boxPer', svg:'svgPer', tip:'tipPer', type:'line', markers:true,
+    points: perPts,
+    lastLabel: lastPer != null ? fmtPer(lastPer) : '',
+    tipRows: function(i){
+      var r = rows[i];
+      return [
+        { n:'PER', v: fmtPer(r.per), color:'var(--series-1)' },
+        { n:'年度末株価', v: r.price != null ? fmtYen(r.price) : '—' },
+        { n:'EPS', v: fmtEps(r.eps) }
+      ];
+    }
+  });
+
+  // PEGチャート
+  var pegPts = rows.map(function(r){
+    return { label: fyLabel(r.fy), v: r.peg, xtick: String(r.fy).split('.')[0] };
+  });
+  var lastPeg = null;
+  rows.forEach(function(r){ if (r.peg != null) lastPeg = r.peg; });
+  drawChart({
+    box:'boxPeg', svg:'svgPeg', tip:'tipPeg', type:'line', markers:true,
+    points: pegPts,
+    ref: { v: 1, label: '目安 1倍' },
+    lastLabel: lastPeg != null ? fmtPeg(lastPeg) : '',
+    tipRows: function(i){
+      var r = rows[i];
+      return [
+        { n:'PEGレシオ', v: fmtPeg(r.peg), color:'var(--series-1)' },
+        { n:'PER', v: fmtPer(r.per) },
+        { n:'EPS成長率', v: fmtPct(r.growth) }
+      ];
+    }
+  });
+
+  // 表
+  var tb = $('tbody');
+  tb.innerHTML = '';
+  rows.forEach(function(r){
+    var tr = document.createElement('tr');
+    [ fyLabel(r.fy),
+      r.price != null ? fmtYen(r.price) : '—',
+      fmtEps(r.eps),
+      fmtPct(r.growth),
+      fmtPer(r.per),
+      fmtPeg(r.peg)
+    ].forEach(function(txt, i){
+      var td = document.createElement('td');
+      if (i === 5) td.className = 'tot';
+      td.textContent = txt;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+
+  try { localStorage.setItem('karte-code', st.code); } catch(e){}
+}
+
+/* ---------- 初期化 ---------- */
+function buildList(){
+  var box = $('stocklist');
+  DATA.stocks.forEach(function(st){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'stockbtn'; b.dataset.code = st.code;
+    b.setAttribute('aria-pressed', 'false');
+    var nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = st.name;
+    var cd = document.createElement('span'); cd.className = 'cd'; cd.textContent = st.code;
+    b.appendChild(nm); b.appendChild(cd);
+    b.addEventListener('click', function(){ state.code = st.code; render(); });
+    box.appendChild(b);
+  });
+}
+
+function initTheme(){
+  var btn = $('themeBtn');
+  var saved = null;
+  try { saved = localStorage.getItem('karte-theme'); } catch(e){}
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  var label = function(){
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+      (!document.documentElement.getAttribute('data-theme') &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+    btn.textContent = dark ? '画面を明るくする' : '画面を暗くする';
+  };
+  label();
+  btn.addEventListener('click', function(){
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+      (!document.documentElement.getAttribute('data-theme') &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = dark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('karte-theme', next); } catch(e){}
+    label();
+    render();
+  });
+}
+
+if (DATA.sample) $('sampleWarn').hidden = false;
+$('footSrc').textContent = 'データ：' + (DATA.source || '—') + (DATA.updated ? '　最終更新：' + DATA.updated : '');
+
+var savedCode = null;
+try { savedCode = localStorage.getItem('karte-code'); } catch(e){}
+state.code = savedCode || (DATA.stocks[0] && DATA.stocks[0].code);
+
+buildList();
+initTheme();
+render();
+
+if (window.ResizeObserver){
+  var ro = new ResizeObserver(function(){ render(); });
+  ro.observe($('boxPrice'));
+} else {
+  window.addEventListener('resize', function(){ render(); });
+}
+
+})();
+</script>
+</body>
+</html>
