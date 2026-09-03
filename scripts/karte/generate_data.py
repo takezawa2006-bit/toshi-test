@@ -136,6 +136,10 @@ def main():
         eps = s.get("eps", [])
         if len(eps) < 10:
             print(f"注意: {s['code']} {s['name']} のEPSが{len(eps)}期分しかありません")
+        # forecast は今期・来期の予想EPS。2期そろって初めて直近期の成長率とPEGが出る
+        forecast = s.get("forecast", [])
+        if len(forecast) < 2:
+            print(f"注意: {s['code']} {s['name']} の予想EPSが{len(forecast)}期分です（2期で直近のPEGが出ます）")
         stocks.append(
             {
                 "code": s["code"],
@@ -144,6 +148,7 @@ def main():
                 "fyMonth": s["fyMonth"],
                 "prices": prices,
                 "eps": eps,
+                "forecast": forecast,
             }
         )
 
