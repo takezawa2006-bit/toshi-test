@@ -1,0 +1,5 @@
+.vercel
+.env*
+
+# 株価取得のローカルキャッシュ（generate_data.py が作る）
+scripts/karte/price_cache.json
