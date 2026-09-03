@@ -1,0 +1,44 @@
+{
+  "_説明": "銘柄カルテの入力台帳です。epsには各銘柄の本決算の実績EPS（1株利益、円）を古い期から順に10期分入れます。株式分割がある銘柄は分割調整後の値（IR Bankの表示値）を使ってください。全銘柄の入力が済んだらsampleをfalseにし、sourceとupdatedを書き換えて、python3 scripts/karte/generate_data.py を実行します。",
+  "sample": true,
+  "updated": "2026年9月4日",
+  "source": "サンプルデータ（架空の数値）",
+  "stocks": [
+    {
+      "code": "3498",
+      "name": "霞ヶ関キャピタル",
+      "market": "東証プライム",
+      "fyMonth": 8,
+      "eps": [],
+      "_記入例": [{ "fy": "2016.8", "v": 12.3 }, { "fy": "2017.8", "v": 23.4 }]
+    },
+    {
+      "code": "6920",
+      "name": "レーザーテック",
+      "market": "東証プライム",
+      "fyMonth": 6,
+      "eps": []
+    },
+    {
+      "code": "5803",
+      "name": "フジクラ",
+      "market": "東証プライム",
+      "fyMonth": 3,
+      "eps": []
+    },
+    {
+      "code": "7011",
+      "name": "三菱重工業",
+      "market": "東証プライム",
+      "fyMonth": 3,
+      "eps": []
+    },
+    {
+      "code": "3399",
+      "name": "丸千代山岡家",
+      "market": "東証スタンダード",
+      "fyMonth": 1,
+      "eps": []
+    }
+  ]
+}
