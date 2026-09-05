@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 銘柄カルテのデータ生成スクリプト
+# 銘柄分析官のデータ生成スクリプト
 #
 # やること
 #   1) Yahoo!ファイナンスから各銘柄の月次株価（株式分割調整済みの終値）を取得
@@ -38,7 +38,7 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
 
 HEADER = (
-    "// 銘柄カルテのデータファイル。scripts/karte/generate_data.py が再生成します。\n"
+    "// 銘柄分析官のデータファイル。scripts/karte/generate_data.py が再生成します。\n"
     "// sample:true の間は画面に「サンプルデータ」の注意書きが表示されます。\n"
 )
 
