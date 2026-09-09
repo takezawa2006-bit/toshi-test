@@ -375,6 +375,14 @@ const APPS = [
     url: "https://meigara-karuta.vercel.app/",
     repo: null,
   },
+  {
+    // status を空にするとタグを出さない
+    cat: "tool", status: null, date: "",
+    title: "楽屋",
+    desc: "関係者用",
+    url: "https://takezawa-playbook.vercel.app/admin",
+    repo: null,
+  },
 ];
 
 const STATUS = {
@@ -416,7 +424,8 @@ function matches(app){
 }
 
 function cardHtml(app){
-  const st = STATUS[app.status] || STATUS.repo;
+  // status を指定しないカードは状態のタグを出さない
+  const st = app.status ? (STATUS[app.status] || STATUS.repo) : null;
   const cat = CATS.find(c => c.key === app.cat);
   const openBtn = app.url
     ? `<a class="btn btn-open" href="${esc(app.url)}" target="_blank" rel="noopener">開く</a>` : "";
@@ -425,7 +434,7 @@ function cardHtml(app){
   return `<article class="appcard">
     <div class="badges">
       <span class="badge cat">${esc(cat ? cat.label : app.cat)}</span>
-      <span class="badge ${st.cls}">${esc(st.label)}</span>
+      ${st ? `<span class="badge ${st.cls}">${esc(st.label)}</span>` : ""}
     </div>
     <h3 class="app-title">${esc(app.title)}</h3>
     <p class="app-desc">${esc(app.desc)}</p>
