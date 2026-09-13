@@ -170,6 +170,7 @@ body{
 .badge.live{color:var(--green);border-color:var(--green)}
 .badge.repo{color:var(--ink-soft);border-color:var(--line)}
 .badge.check{color:var(--gold);border-color:var(--gold)}
+.badge.running{color:var(--shu);border-color:var(--shu)}
 .app-title{
   font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
   font-size:17.5px;font-weight:700;line-height:1.5;
@@ -243,7 +244,8 @@ body{
    作品台帳
    新しい作品を追加するときは、このAPPS配列に1件追加するだけです。
    cat: カテゴリーキー（CATSに定義があるもの）
-   status: "live"=公開中 / "check"=公開設定要確認 / "repo"=リポジトリ内のみ
+   status: "live"=公開中 / "running"=稼働中（公開ページは無いが動いているもの）
+           / "check"=公開設定要確認 / "repo"=リポジトリ内のみ
    url: 公開ページのURL（無ければnull）
    repo: GitHubリポジトリまたはフォルダのURL（無ければnull）
    date: 更新時期の目安（表示用の文字列。不明なら""）
@@ -264,10 +266,10 @@ const APPS = [
     repo: null,
   },
   {
-    cat: "tool", status: "repo", date: "2026年9月",
+    cat: "tool", status: "running", date: "2026年9月",
     title: "開示見張り番",
-    desc: "重点監視銘柄の適時開示と法定開示を1日2回自動で巡回し、AIが重要度を判定して塾長コメントを添えChatworkへ届けるMac常駐ツール。",
-    url: null,
+    desc: "重点監視銘柄の適時開示と法定開示を1日2回自動で巡回し、AIが重要度を判定して塾長コメントを添えChatworkへ届けるMac常駐ツール。「開く」で配信先のChatworkルームへ。",
+    url: "https://www.chatwork.com/#!rid447191181",
     repo: null,
   },
   {
@@ -387,6 +389,7 @@ const APPS = [
 
 const STATUS = {
   live:  { label: "公開中",       cls: "live"  },
+  running: { label: "稼働中",      cls: "running" },
   check: { label: "公開設定要確認", cls: "check" },
   repo:  { label: "リポジトリ内",   cls: "repo"  },
   unknown: { label: "URL確認中",    cls: "check" },
