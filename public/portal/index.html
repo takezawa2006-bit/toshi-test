@@ -180,6 +180,12 @@ body{
   font-size:13.5px;color:var(--ink-soft);line-height:1.7;
   position:relative;flex:1;
 }
+.app-sub{
+  font-size:12.5px;font-weight:700;color:var(--ink-soft);letter-spacing:.04em;
+  margin-top:-6px;position:relative;
+}
+.app-btns{display:flex;flex-wrap:wrap;gap:8px;position:relative}
+.app-note{font-size:11.5px;color:var(--ink-soft);line-height:1.6;position:relative;margin-top:-2px}
 .app-foot{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   margin-top:2px;position:relative;
@@ -249,6 +255,9 @@ body{
    url: 公開ページのURL（無ければnull）
    repo: GitHubリポジトリまたはフォルダのURL（無ければnull）
    date: 更新時期の目安（表示用の文字列。不明なら""）
+   subtitle: タイトルの下に添える一行（任意）
+   buttons: 「開く」の代わりに並べるボタン [{label, url}]（任意）
+   note: ボタンの下に小さく添える一行（任意）
    ============================================================ */
 const CATS = [
   { key: "tool",  label: "アプリ・ツール" },
@@ -271,6 +280,19 @@ const APPS = [
     desc: "適時開示とニュースを一本の時系列で見張るアプリ。銘柄とキーワードを登録すると、AI塾長コメント付きで通知が届きます（塾生限定・合言葉入場）",
     url: "https://kaiji-mihariban.vercel.app",
     repo: null,
+  },
+  {
+    cat: "tool", status: "live", date: "2026年9月",
+    title: "本日の番付",
+    subtitle: "第1回4K投資レース　順位速報",
+    desc: "平日18時に自動更新。塾生に見せる画面と同じもの。",
+    url: null,
+    repo: null,
+    buttons: [
+      { label: "番付を見る", url: "https://4k-race-2026.vercel.app/banzuke" },
+      { label: "談話室の管理画面", url: "https://4k-race-2026.vercel.app/admin" },
+    ],
+    note: "管理画面は管理用の合言葉で入ります（このページは公開のため合言葉は書いていません）",
   },
   {
     cat: "tool", status: "live", date: "2026年9月",
@@ -432,6 +454,8 @@ function cardHtml(app){
   const cat = CATS.find(c => c.key === app.cat);
   const openBtn = app.url
     ? `<a class="btn btn-open" href="${esc(app.url)}" target="_blank" rel="noopener">開く</a>` : "";
+  const extraBtns = (app.buttons || []).map(b =>
+    `<a class="btn btn-open" href="${esc(b.url)}" target="_blank" rel="noopener">${esc(b.label)}</a>`).join("");
   const ghBtn = app.repo
     ? `<a class="btn btn-gh" href="${esc(app.repo)}" target="_blank" rel="noopener">GitHub</a>` : "";
   return `<article class="appcard">
@@ -440,7 +464,10 @@ function cardHtml(app){
       ${st ? `<span class="badge ${st.cls}">${esc(st.label)}</span>` : ""}
     </div>
     <h3 class="app-title">${esc(app.title)}</h3>
+    ${app.subtitle ? `<p class="app-sub">${esc(app.subtitle)}</p>` : ""}
     <p class="app-desc">${esc(app.desc)}</p>
+    ${extraBtns ? `<div class="app-btns">${extraBtns}</div>` : ""}
+    ${app.note ? `<p class="app-note">${esc(app.note)}</p>` : ""}
     <div class="app-foot">
       <span class="app-date">${esc(app.date || "")}</span>
       <span class="app-links">${ghBtn}${openBtn}</span>
